@@ -9,3 +9,61 @@ editor_options:
   chunk_output_type: inline
 ---
 
+#### Create a vector s1 whose elements correspond to the number of passengers who can possibly get on board the bus at a particular stop.
+
+```{r}
+s1 = c(0, 1, 2)
+```
+
+#### Create a vector p1 whose elements correspond to the respective chances of the number of passengers identified in the previous question getting on board the bus at a particular stop.
+
+```{r}
+p1 = c(0.5, 0.4, 0.1)
+```
+
+#### Create a matrix(2x10) P such that the jth column of this matrix should have a passenger on the buss continuing-on and getting-off chances for the jth stop for j = 1,....,10
+
+```{r}
+P = matrix(c(0.99, 0.01, 0.2, 0.8, 0.2, 0.8, 0.8, 0.2, 0.8, 0.2, 0.8, 0.2, 0.8, 0.2, 0.2, 0.8, 0.2, 0.8, 0.0, 1.0), nrow = 2, ncol = 10)
+P
+```
+
+#### Create a vector s2 whose elements correspond to the encoded versions of a passenger staying on the bus and getting off of the bus at a particular stop, respectively.
+
+```{r}
+s2 = c(0, 1)
+```
+
+```{r}
+sample(s1, size = 10, replace = T, prob = p1)
+```
+
+#### This is for no people at the first stop
+
+```{r}
+n = 0 # zero passengers in the bus at stop-1
+for (j in 1:10){
+ # simulating the continuing on or getting off of the bus
+  if (n > 0){ # if there is at least one passenger in the bus
+    n = n- sum(sample(s2, size = n, replace = T, prob = P[, j])) # updating the number of passengers in the bus by subtracting off the number of passengers that gets off of the bus at the j-th stop
+  }
+ n = n + sample(s1, size = 1, prob = p1) # update the current number of passengers in the bus by adding the number of passengers that board the bus at the j-th stop
+ print(n)
+}
+print(n)
+```
+
+#### This is for 30 people getting onboard before the bus arriving at the first stop
+
+```{r}
+n = 30 # thirty passengers in the bus at stop-1
+for (j in 1:10){
+ # simulating the continuing on or getting off of the bus
+  if (n > 0){ # if there is at least one passenger in the bus
+    n = n- sum(sample(s2, size = n, replace = T, prob = P[, j])) # updating the number of passengers in the bus by subtracting off the number of passengers that gets off of the bus at the j-th stop
+  }
+ n = n + sample(s1, size = 1, prob = p1) # update the current number of passengers in the bus by adding the number of passengers that board the bus at the j-th stop
+ cat(sprintf("No. of passengers after stop - %d = %d\n", j, n))
+}
+cat(sprintf("No. of passengers after last stop = %d", n))
+```
